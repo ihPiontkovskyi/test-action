@@ -42,10 +42,10 @@ jobs:
         uses: advancedcsg-open/action-jfrog-cli@master
         with:
           url: ${{ secrets.RT_URL }}
-          args: upload "staging/*" "/libs-snapshot-local"
+          args: upload "models/staging/*" "/libs-snapshot-local"
 
       - name: Update documentation
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          file_pattern: docs/.
+          file_pattern: models/docs/.
           push_options: '--force-with-lease'
