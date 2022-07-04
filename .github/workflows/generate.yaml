@@ -29,8 +29,8 @@ jobs:
       #          args: u "staging/*" "/libs-snapshot-local"
         uses: jfrog/setup-jfrog-cli@v2
         env:
-          JF_ENV_URL: ${{ secrets.RT_URL }}
-          JF_ENV_APIKEY: ${{ secrets.RT_URL }}
+          JF_ENV_1: ${{ secrets.RT_URL }}
+          JF_ENV_2: ${{ secrets.RT_APIKEY }}
       - run: |
           jf rt u "staging/*" "/libs-snapshot-local"
       - name: Update documentation
