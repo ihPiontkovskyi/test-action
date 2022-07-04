@@ -1,0 +1,33 @@
+name: Java CI
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Chekout repository
+        uses: actions/checkout@v3
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+      - name: Build with Maven
+        run: mvn clean install
+      - name: Copy jar to separate directory
+        run: mkdir staging && cp target/*.jar staging
+#      - name: Publish to artifactory
+#        uses: advancedcsg-open/action-jfrog-cli@master
+#        with:
+#          url: ${{ secrets.RT_URL }}
+#          args: upload "staging/*" "/libs-snapshot-local"
+      - name: Update documentation
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          file_pattern: docs/.
+          commit_options: '--amend'
+          push_options: '--force-with-lease'
