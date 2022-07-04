@@ -1,0 +1,26 @@
+name: Java CI
+
+on: [ push ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+      - name: Build with Maven
+        run: mvn clean install
+      - run: mkdir staging && cp target/*.jar staging
+      #      - uses: actions/upload-artifact@v3
+      #        with:
+      #          name: Package
+      #          path: staging
+      - uses: EndBug/add-and-commit@v9
+        with:
+          add: 'docs'
+          commit: --amend
+          push: --force

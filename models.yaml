@@ -1,0 +1,54 @@
+openapi: "3.0.2"
+info:
+  title: Core Models
+  version: "0.0.1"
+
+components:
+  schemas:
+    LocationGeofencePayload:
+      type: object
+      required: [ DeviceId, GeofenceId, Position ]
+      properties:
+        DeviceId:
+          title: Device id
+          description: Id of the device
+          type: string
+        GeofenceId:
+          title: Geofence id
+          description: Assets that have been removed from the given group.
+          type: string
+        Position:
+          title: Position
+          description: The list that reperesnt a position
+          type: array
+          items:
+            type: number
+            format: float
+        SampleTime:
+          title: Sample time
+          description: time
+          type: string
+          format: date-time
+        EventType:
+          title: Event type
+          description: event type
+          type: string
+          enum:
+            - ENTER
+            - EXIT
+        Accuracy:
+          $ref: '#/components/schemas/Accuracy'
+        PositionProperties:
+          title: PositionProperties
+          description: PositionProperties
+          type: string
+    Accuracy:
+      type: object
+      title: Accuracy
+      description: Accuracy
+      properties:
+        Horizontal:
+          title: Horizontal accuract
+          description: Horizontal accuract
+          type: number
+          format: float
