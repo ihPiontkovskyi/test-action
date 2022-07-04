@@ -26,4 +26,8 @@ jobs:
 #          url: ${{ secrets.RT_URL }}
 #          args: upload "staging/*" "/libs-snapshot-local"
       - name: Update documentation
-        run: git add docs/. && git commit --amend && git push --force
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          file_pattern: docs/.
+          commit_options: '--amend'
+          push_options: '--force-with-lease'
