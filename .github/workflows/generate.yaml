@@ -26,7 +26,7 @@ jobs:
           url: ${{ secrets.RT_URL }}
           credentials type: 'apikey'
           apikey: ${{ secrets.RT_APIKEY }}
-          args: u "staging/*" "/all"
+          args: u "staging/*" "/ext-snapshot-local"
       - name: Update documentation
         uses: EndBug/add-and-commit@v9
         with:
