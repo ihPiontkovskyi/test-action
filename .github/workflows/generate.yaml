@@ -21,18 +21,16 @@ jobs:
       - name: Copy jar to separate directory
         run: mkdir staging && cp target/*.jar staging
       - name: Publish to artifactory
-      #        uses: advancedcsg-open/action-jfrog-cli@master
-      #        with:
-      #          url: ${{ secrets.RT_URL }}
-      #          credentials type: 'apikey'
-      #          apikey: ${{ secrets.RT_APIKEY }}
-      #          args: u "staging/*" "/libs-snapshot-local"
-        uses: jfrog/setup-jfrog-cli@v2
-        env:
-          JF_ENV_1: ${{ secrets.RT_URL }}
-          JF_ENV_2: ${{ secrets.RT_APIKEY }}
-      - run: |
-          jf rt u "staging/*" "/libs-snapshot-local"
+        uses: advancedcsg-open/action-jfrog-cli@master
+        with:
+          url: ${{ secrets.RT_URL }}
+          args: upload "staging/*" "/libs-snapshot-local"
+      #        uses: jfrog/setup-jfrog-cli@v2
+      #        env:
+      #          JF_ENV_1: ${{ secrets.RT_URL }}
+      #          JF_ENV_2: ${{ secrets.RT_APIKEY }}
+      #      - run: |
+      #          jf rt u "staging/*" "/libs-snapshot-local"
       - name: Update documentation
         uses: EndBug/add-and-commit@v9
         with:
