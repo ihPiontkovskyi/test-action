@@ -28,7 +28,7 @@ jobs:
       #          apikey: ${{ secrets.RT_APIKEY }}
       #          args: u "staging/*" "/libs-snapshot-local"
         uses: jfrog/setup-jfrog-cli@v2
-        run: |
+      - run: |
           jf rt u --url ${{ secrets.RT_URL }} --apikey ${{ secrets.RT_APIKEY }} "staging/*" "/libs-snapshot-local"
       - name: Update documentation
         uses: EndBug/add-and-commit@v9
