@@ -28,8 +28,11 @@ jobs:
       #          apikey: ${{ secrets.RT_APIKEY }}
       #          args: u "staging/*" "/libs-snapshot-local"
         uses: jfrog/setup-jfrog-cli@v2
+        env:
+          JF_ARTIFACTORY_URL: ${{ secrets.RT_URL }}
+          JF_ARTIFACTORY_APIKEY: ${{ secrets.RT_URL }}
       - run: |
-          jf rt u --url ${{ secrets.RT_URL }} --apikey ${{ secrets.RT_APIKEY }} "staging/*" "/libs-snapshot-local"
+          jf rt u --url $JF_ARTIFACTORY_URL --apikey $JF_ARTIFACTORY_APIKEY "staging/*" "/libs-snapshot-local"
       - name: Update documentation
         uses: EndBug/add-and-commit@v9
         with:
