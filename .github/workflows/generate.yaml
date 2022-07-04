@@ -30,7 +30,7 @@ jobs:
       #          JF_ENV_1: ${{ secrets.RT_URL }}
       #          JF_ENV_2: ${{ secrets.RT_APIKEY }}
       #      - run: |
-      #          jf rt u "staging/*" "/libs-snapshot-local"
+      #          jf rt u "staging/*" "libs-snapshot"
       - name: Update documentation
         uses: EndBug/add-and-commit@v9
         with:
