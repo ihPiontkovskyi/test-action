@@ -10,7 +10,7 @@ on:
 
 defaults:
   run:
-    working-directory: models
+    working-directory: models/
 
 jobs:
   build:
@@ -29,7 +29,7 @@ jobs:
         id: version-extractor
         uses: CumulusDS/get-yaml-paths-action@v0.1.0
         with:
-          file: models.yaml
+          file: models/spec.yaml
           revision: info.version
 
       - name: Build with Maven
