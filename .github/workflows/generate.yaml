@@ -1,7 +1,10 @@
-name: Java CI
+name: Generate artifact and update documentation
 
-on: [ push ]
-
+on:
+  push:
+    branches:
+      - master
+      - develop
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,10 +18,10 @@ jobs:
       - name: Build with Maven
         run: mvn clean install
       - run: mkdir staging && cp target/*.jar staging
-      #      - uses: actions/upload-artifact@v3
-      #        with:
-      #          name: Package
-      #          path: staging
+      - uses: jfrog/setup-jfrog-cli@v1
+        env:
+          JF_ARTIFACTORY: ${{ secrets.artifactory_token }}
+      - run: jfrog rt upload staging/*
       - uses: EndBug/add-and-commit@v9
         with:
           add: 'docs'
