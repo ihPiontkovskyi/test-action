@@ -20,7 +20,7 @@ jobs:
       - run: mkdir staging && cp target/*.jar staging
       - uses: jfrog/setup-jfrog-cli@v1
         env:
-          JF_ARTIFACTORY: ${{ secrets.artifactory_token }}
+          JF_ENV_1: ${{ secrets.artifactory_token }}
       - run: jfrog rt upload staging/* all/
       - uses: EndBug/add-and-commit@v9
         with:
