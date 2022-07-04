@@ -21,7 +21,7 @@ jobs:
       - uses: jfrog/setup-jfrog-cli@v1
         env:
           JF_ARTIFACTORY: ${{ secrets.artifactory_token }}
-      - run: jfrog rt upload staging/*
+      - run: jfrog rt upload staging/* all/
       - uses: EndBug/add-and-commit@v9
         with:
           add: 'docs'
