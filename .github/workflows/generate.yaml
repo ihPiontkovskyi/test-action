@@ -17,12 +17,13 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
       - name: Extract yaml version
+        id: version-extractor
         uses: CumulusDS/get-yaml-paths-action@v0.1.0
         with:
-            file: models.yaml
-            revision: info.version
+          file: models.yaml
+          revision: info.version
       - name: Build with Maven
-        run: mvn clean install -Drevision=${{ revision }}
+        run: mvn clean install -Drevision=${{ steps.version-extractor.outputs.revision }}
       - name: Copy jar to separate directory
         run: mkdir staging && cp target/*.jar staging
       - name: Publish to artifactory
