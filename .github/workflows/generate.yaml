@@ -16,15 +16,20 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
+      - name: Extract yaml version
+        uses: CumulusDS/get-yaml-paths-action@v0.1.0
+        with:
+            file: models.yaml
+            revision: info.version
       - name: Build with Maven
-        run: mvn clean install
+        run: mvn clean install -Drevision=${{ revision }}
       - name: Copy jar to separate directory
         run: mkdir staging && cp target/*.jar staging
-#      - name: Publish to artifactory
-#        uses: advancedcsg-open/action-jfrog-cli@master
-#        with:
-#          url: ${{ secrets.RT_URL }}
-#          args: upload "staging/*" "/libs-snapshot-local"
+      - name: Publish to artifactory
+        uses: advancedcsg-open/action-jfrog-cli@master
+        with:
+          url: ${{ secrets.RT_URL }}
+          args: upload "staging/*" "/libs-snapshot-local"
       - name: Update documentation
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
