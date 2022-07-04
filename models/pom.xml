@@ -9,7 +9,7 @@
   <version>${reveision}</version>
 
   <properties>
-    <reveision>0.0.1-SNAP</reveision>
+    <revision>0.0.1-SNAP</revision>
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
   </properties>
