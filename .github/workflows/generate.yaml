@@ -27,7 +27,7 @@ jobs:
           url: ${{ secrets.RT_URL }}
           credentials type: 'apikey'
           apikey: ${{ secrets.RT_APIKEY }}
-          args: u "staging/*" "test" --recursive=true
+          args: u "staging/*" ""
       - name: Update documentation
         uses: EndBug/add-and-commit@v9
         with:
