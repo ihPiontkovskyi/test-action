@@ -45,7 +45,7 @@ components:
     Accuracy:
       type: object
       title: Accuracy
-      description: Accuracy diff
+      description: Accuracy different
       properties:
         Horizontal:
           title: Horizontal accuract
