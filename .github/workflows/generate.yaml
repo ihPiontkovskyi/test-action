@@ -114,7 +114,7 @@ jobs:
 
       - name: Update documentation
         uses: stefanzweifel/git-auto-commit-action@v4
-        if: github.event_name != "workflow_dispatch"
+        if: github.event_name != 'workflow_dispatch'
         with:
           file_pattern: models/docs/.
           push_options: '--force-with-lease'
