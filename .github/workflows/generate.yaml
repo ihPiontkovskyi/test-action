@@ -105,7 +105,7 @@ jobs:
           revision: info.version
           
       - name: Build with Maven
-        run: revision="" && if [ ${{ inputs.version }} ]; then revision=${{ inputs.version }}; else revision=${{ steps.version-extractor.outputs.revision }}; fi && mvn clean install -Drevision="$revision"
+        run: revision="" && if [ ${{ inputs.version }} ]; then revision=${{ inputs.version }}-${{ GITHUB_SHA:0:5 }}; else revision=${{ steps.version-extractor.outputs.revision }}; fi && mvn clean install -Drevision="$revision"
         
       - name: Update documentation
         uses: stefanzweifel/git-auto-commit-action@v4
