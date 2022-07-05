@@ -44,7 +44,7 @@ jobs:
                 "name": "libs-release",
                 "url": "https://dbartifactory.jfrog.io/dbartifactory/libs-release",
                 "snapshots": {
-                  "enabled": "false",
+                  "enabled": "false"
                 }
               },
               { 
@@ -64,7 +64,7 @@ jobs:
                 "name": "plugins-release",
                 "url": "https://dbartifactory.jfrog.io/dbartifactory/plugins-release",
                 "snapshots": {
-                  "enabled": "false",
+                  "enabled": "false"
                 }
               },
               {
@@ -95,7 +95,7 @@ jobs:
           revision: info.version
 
       - name: Build with Maven
-        run: mvn clean deploy -Drevision=${{ steps.version-extractor.outputs.revision }}
+        run: mvn clean install -Drevision=${{ steps.version-extractor.outputs.revision }}
 
       - name: Update documentation
         uses: stefanzweifel/git-auto-commit-action@v4
