@@ -15,7 +15,7 @@ on:
         required: true
         default: '0.0.1-SNAPSHOT'
         type: string
-        
+
 
 defaults:
   run:
@@ -103,10 +103,16 @@ jobs:
         with:
           file: models/spec.yaml
           revision: info.version
-          
+
+      - name: Declare some variables
+        id: vars
+        shell: bash
+        run: |
+          echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
       - name: Build with Maven
-        run: revision="" && if [ ${{ inputs.version }} ]; then revision=${{ inputs.version }}-${{ GITHUB_SHA:0:5 }}; else revision=${{ steps.version-extractor.outputs.revision }}; fi && mvn clean install -Drevision="$revision"
-        
+        run: revision="" && if [ ${{ inputs.version }} ]; then revision=${{ inputs.version }}-${{ steps.vars.outputs.sha_short }}; else revision=${{ steps.version-extractor.outputs.revision }}; fi && mvn clean install -Drevision="$revision"
+
       - name: Update documentation
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
