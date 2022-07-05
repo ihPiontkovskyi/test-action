@@ -67,3 +67,18 @@ components:
           description: y x coordinate
           type: number
           format: float
+    Point2:
+      type: object
+      title: Point
+      description: Point
+      properties:
+        x:
+          title: x
+          description: x coordinate
+          type: number
+          format: float
+        y:
+          title: y
+          description: y x coordinate
+          type: number
+          format: float
