@@ -1,4 +1,4 @@
-name:
+name: Generate artifact & update documentation
 
 on:
   push:
@@ -7,6 +7,14 @@ on:
       - develop
     paths:
       - models/**
+
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Artifact version'
+        required: true
+        default: '0.0.1-SNAPSHOT'
+        type: string
 
 defaults:
   run:
@@ -93,10 +101,10 @@ jobs:
         with:
           file: models/spec.yaml
           revision: info.version
-
+          
       - name: Build with Maven
-        run: mvn clean install -Drevision=${{ steps.version-extractor.outputs.revision }}
-
+        run: mvn clean install  && if [ ${{ version }} ]; then -Drevision=${{ version }}; else -Drevision=${{ steps.version-extractor.outputs.revision }}; fi
+        
       - name: Update documentation
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
