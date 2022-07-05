@@ -25,6 +25,68 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
 
+      - name: maven-settings-xml-action
+        uses: whelk-io/maven-settings-xml-action@v20
+        with:
+          mirrors: >
+            [
+              {
+                "id": "libs-snapshot",
+                "name": "libs-snapshot",
+                "mirrorOf": "*,!libs-snapshot,!libs-release,!libs-snapshot-local,!libs-release-local,!plugins-snapshot-local,!plugins-release-local,!ext-snapshot-local,!ext-release-local",
+                "url": "https://dbartifactory.jfrog.io/dbartifactory/all"
+              }
+            ]
+          repositories: >
+            [
+              { 
+                "id": "central",
+                "name": "libs-release",
+                "url": "https://dbartifactory.jfrog.io/dbartifactory/libs-release",
+                "snapshots": {
+                  "enabled": "false",
+                }
+              },
+              { 
+                "id": "snapshots", 
+                "name": "libs-snapshot",
+                "url": "https://dbartifactory.jfrog.io/dbartifactory/libs-snapshot",
+                "snapshots": {
+                  "enabled": "true",
+                  "updatePolicy": "always"
+                }
+              } 
+            ]
+          plugin_repositories: >
+            [
+              {
+                "id": "central",
+                "name": "plugins-release",
+                "url": "https://dbartifactory.jfrog.io/dbartifactory/plugins-release",
+                "snapshots": {
+                  "enabled": "false",
+                }
+              },
+              {
+                "id": "snapshots",
+                "name": "plugins-snapshot",
+                "url": "https://dbartifactory.jfrog.io/dbartifactory/plugins-snapshot",
+                "snapshots": {
+                  "enabled": "true",
+                  "updatePolicy": "always"
+                }
+              }
+            ]
+          profiles: >
+            [
+              {
+                "id": "artifactory"
+              }
+            ]
+          active_profiles: >
+            [
+              "artifactory"
+            ]
       - name: Extract yaml version
         id: version-extractor
         uses: CumulusDS/get-yaml-paths-action@v0.1.0
@@ -33,16 +95,7 @@ jobs:
           revision: info.version
 
       - name: Build with Maven
-        run: mvn clean install -Drevision=${{ steps.version-extractor.outputs.revision }}
-
-      - name: Copy jar to separate directory
-        run: mkdir staging && cp target/*.jar staging
-
-      - name: Publish to artifactory
-        uses: advancedcsg-open/action-jfrog-cli@master
-        with:
-          url: ${{ secrets.RT_URL }}
-          args: upload "models/staging/*" "/libs-snapshot-local"
+        run: mvn clean deploy -Drevision=${{ steps.version-extractor.outputs.revision }}
 
       - name: Update documentation
         uses: stefanzweifel/git-auto-commit-action@v4
