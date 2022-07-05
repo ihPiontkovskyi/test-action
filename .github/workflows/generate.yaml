@@ -109,7 +109,7 @@ jobs:
         run: |
           echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
           echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-          echo "##[set-output name=revision;]$(if [ ${{ github.event_name }} = 'workflow_dispatch' ]; then if [ ${{ inputs.version }} ] echo ${{ inputs.version }}-${{ steps.vars.outputs.sha_short }}; else echo ${{ steps.version-extractor.outputs.revision }}-${{ steps.vars.outputs.sha_short }} fi  else revision=${{ steps.version-extractor.outputs.revision }}; fi)"
+          echo "##[set-output name=revision;]$(if [ ${{ github.event_name }} = 'workflow_dispatch' ]; then if [ ${{ inputs.version }} ] echo ${{ inputs.version }}-$(git rev-parse --short HEAD); else echo ${{ steps.version-extractor.outputs.revision }}-$(git rev-parse --short HEAD) fi;  else revision=${{ steps.version-extractor.outputs.revision }}; fi)"
       - name: Build with Maven
         run: mvn clean install -Drevision="$revision"
 
