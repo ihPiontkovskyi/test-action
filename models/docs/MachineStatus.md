@@ -2,6 +2,7 @@
 
 # MachineStatus
 
+Calamp machine status
 
 ## Properties
 

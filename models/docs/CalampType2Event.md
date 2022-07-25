@@ -16,9 +16,11 @@ Calamp type 2 event
 |**messageType** | [**MessageTypeEnum**](#MessageTypeEnum) | Message type  _This field represents [messageHeader.messageType] property from kaitai struct_  |  [optional] |
 |**sequenceNumber** | **Long** | A  number is used to uniquely identify a message.  _This field represents [messageHeader.sequenceNumber] property from kaitai struct_  |  [optional] |
 |**deviceGeneration** | **Long** | Bobcat Device Generation  _This field represents [messageBody.deviceGeneration] property from kaitai struct_  |  [optional] |
+|**status** | [**EventStatus**](EventStatus.md) |  |  [optional] |
 |**eventIndex** | **Long** | The index number of the event that generated the report; values should range from 0-249. 255 represents a Real Time PEG Action request.          _This field represents [messageBody.eventIndex] property from kaitai struct_  |  [optional] |
 |**eventCode** | [**EventCodeEnum**](#EventCodeEnum) | The event code assigned to the report as specified by the event’s Action Parameter  _This field represents [messageBody.eventCode] property from kaitai struct_  |  [optional] |
 |**accumulatorType** | [**AccumulatorTypeEnum**](#AccumulatorTypeEnum) | Accumulator Type  _This field represents [messageBody.accumulatorType] property from kaitai struct_  |  [optional] |
+|**machineStatus** | [**MachineStatus**](MachineStatus.md) |  |  [optional] |
 
 
 

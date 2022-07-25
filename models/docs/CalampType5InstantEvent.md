@@ -16,6 +16,8 @@ Calamp Type 5 Instant Event
 |**messageType** | [**MessageTypeEnum**](#MessageTypeEnum) | Message type  _This field represents [messageHeader.messageType] property from kaitai struct_  |  [optional] |
 |**sequenceNumber** | **Long** | A  number is used to uniquely identify a message.  _This field represents [messageHeader.sequenceNumber] property from kaitai struct_  |  [optional] |
 |**deviceGeneration** | **Long** | Bobcat Device Generation  _This field represents [messageBody.deviceGeneration] property from kaitai struct_  |  [optional] |
+|**status** | [**EventStatus**](EventStatus.md) |  |  [optional] |
+|**message** | [**BobcatInstantMessage**](BobcatInstantMessage.md) |  |  [optional] |
 
 
 
