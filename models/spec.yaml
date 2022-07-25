@@ -1,84 +1,777 @@
 openapi: "3.0.2"
 info:
   title: Core Models
-  version: "1.8.1"
+  version: "1.0.0"
 
 components:
   schemas:
-    LocationGeofencePayload:
+    CalampEvent:
       type: object
-      required: [ DeviceId, GeofenceId, Position ]
+      description: This object wrap calamp event
       properties:
-        DeviceId:
-          title: Device id
-          description: Id of the device
+        lmdirect:
+          oneOf:
+            - $ref: "#/components/schemas/CalampType2Event"
+            - $ref: "#/components/schemas/CalampType5InstantEvent"
+
+    CalampType2Event:
+      type: object
+      description: Calamp type 2 event
+      properties:
+        mobileId:
+          title: Mobile id
+          description: |
+            The Mobile ID of the LMU that either originated the LM Direct™ message or the LMU for which the message is intended.
+
+            _This field represents [optionsHeader.mobileId] property from kaitai struct_
           type: string
-        GeofenceId:
-          title: Geofence id
-          description: Assets that have been removed from the given group.
-          type: string
-        Position:
-          title: Position
-          description: The list that reperesnt a position
-          type: array
-          items:
-            type: number
-            format: float
-        SampleTime:
-          title: Sample time
-          description: time
-          type: string
-          format: date-time
-        EventType:
-          title: Event type
-          description: event type
+          example: YAEAEHI=
+        mobileIdType:
+          title: Type of mobile identifier
+          description: |
+            The type of Mobile ID being used by the LMU
+            
+            _This field represents [optionsHeader.mobileIdType] property from kaitai struct_
           type: string
           enum:
-            - ENTER
-            - EXIT
-        Accuracy:
-          $ref: '#/components/schemas/Accuracy'
-        PositionProperties:
-          title: PositionProperties
-          description: PositionProperties
+            - OFF
+            - ESN
+            - IMEI
+            - IMSI
+            - USER_DEFINED
+            - PHONE_NUMBER
+            - IP
+            - MEID
+          example: ESN
+        esn:
+          title: Machine ESN
+          description: |
+            The ESN is the Electronic Serial Number of the LMU that either originated the LM Direct message or for which the message is intended.
+
+            _This field represents [optionsHeader.esn] property from kaitai struct_
           type: string
-    Accuracy:
+          example: null
+        vin:
+          title: Machine VIN
+          description: |
+            The VIN is the Vehicle Identification Number of the vehicle in which the LMU is installed that originated the LM Direct™ message.
+
+            _This field represents [optionsHeader.vin] property from kaitai struct_
+          type: string
+          example: BS4B12237
+        serviceType:
+          title: Service type
+          description: |
+            Service type
+            
+            _This field represents [messageHeader.serviceType] property from kaitai struct_
+          type: string
+          enum:
+            - UNACKNOWLEDGED_REQUEST
+            - ACKNOWLEDGED_REQUEST
+            - RESPONSE_ACKNOWLEDGED_REQUEST
+          example: ACKNOWLEDGED_REQUEST
+        messageType:
+          title: Message type
+          description: |
+            Message type
+            
+            _This field represents [messageHeader.messageType] property from kaitai struct_
+          type: string
+          enum:
+            - NULL_MESSAGE
+            - ACK_NAK_MESSAGE
+            - EVENT_REPORT_MESSAGE
+            - ID_REPORT_MESSAGE
+            - USER_DATA_MESSAGE
+            - APPLICATION_DATA_MESSAGE
+            - CONFIGURATION_PARAMETER_MESSAGE
+            - UNIT_REQUEST_MESSAGE
+            - LOCATE_REPORT_MESSAGE
+            - USER_DATA_WITH_ACCUMULATORS_MESSAGE
+            - MINI_EVENT_REPORT_MESSAGE
+            - MINI_USER_DATA_MESSAGE
+            - MINI_APPLICATION_MESSAGE
+            - DEVICE_VERSION_MESSAGE
+            - APPLICATION_MESSAGE_WITH_ACCUMULATORS
+          example: EVENT_REPORT_MESSAGE
+        sequenceNumber:
+          title: Sequence Number
+          description: |
+            A  number is used to uniquely identify a message.
+            
+            _This field represents [messageHeader.sequenceNumber] property from kaitai struct_
+          type: number
+          format: int64
+          example: 68
+        deviceGeneration:
+          title: Device generation
+          description: |
+            Bobcat Device Generation
+
+            _This field represents [messageBody.deviceGeneration] property from kaitai struct_
+          type: number
+          format: int64
+          example: 2
+        status:
+          - $ref: "#/components/schemas/EventStatus"
+        eventIndex:
+          title: Event index
+          description: |
+            The index number of the event that generated the report; values should range from 0-249.
+            255 represents a Real Time PEG Action request.
+            
+                    _This field represents [messageBody.eventIndex] property from kaitai struct_
+          type: number
+          format: int64
+          example: 55
+        eventCode:
+          title:
+          description: |
+            The event code assigned to the report as specified by the event’s Action Parameter
+            
+            _This field represents [messageBody.eventCode] property from kaitai struct_
+          type: string
+          enum:
+            - ENTER_KEY
+            - START
+            - HEARTBEAT_KEY_ON
+            - STOP
+            - REMOVE_KEY
+            - PING
+            - START_TRAILERING
+            - STOP_TRAILERING
+            - HEARTBEAT_TRAILERING_6H
+            - HEARTBEAT_TRAILERING_20MIN
+            - LOW_BATTERY
+            - GEOFENCE_CHANGE
+            - EXTREMELY_LOW_BATTERY
+            - ATTACHMENT_NUMBER_CHANGE
+            - USER_ID_CHANGE
+            - EXTERNAL_POWER
+            - INTERNAL_BATTERY
+          example: ENTER_KEY
+        accumulatorType:
+          title: Accumulator Type
+          description: |
+            Accumulator Type
+            
+            _This field represents [messageBody.accumulatorType] property from kaitai struct_
+          type: string
+          enum:
+            - STANDARD
+            - ENHANCED32
+            - ENHANCED256
+            - ALTERNATIVE256
+          example: STANDARD
+        machineStatus:
+          - $ref: "#/components/schemas/MachineStatus"
+
+    CalampType5InstantEvent:
       type: object
-      title: Accuracy
-      description: Accuracy different texyt
+      description: Calamp Type 5 Instant Event
       properties:
-        Horizontal:
-          title: Horizontal accuract
-          description: Horizontal accuract
+        mobileId:
+          title: Mobile id
+          description: |
+            The Mobile ID of the LMU that either originated the LM Direct™ message or the LMU for which the message is intended.
+
+            _This field represents [optionsHeader.mobileId] property from kaitai struct_
+          type: string
+          example: YAEAEHI=
+        mobileIdType:
+          title: Type of mobile identifier
+          description: |
+            The type of Mobile ID being used by the LMU
+            
+            _This field represents [optionsHeader.mobileIdType] property from kaitai struct_
+          type: string
+          enum:
+            - OFF
+            - ESN
+            - IMEI
+            - IMSI
+            - USER_DEFINED
+            - PHONE_NUMBER
+            - IP
+            - MEID
+          example: ESN
+        esn:
+          title: Machine ESN
+          description: |
+            The ESN is the Electronic Serial Number of the LMU that either originated the LM Direct message or for which the message is intended.
+
+            _This field represents [optionsHeader.esn] property from kaitai struct_
+          type: string
+          example: null
+        vin:
+          title: Machine VIN
+          description: |
+            The VIN is the Vehicle Identification Number of the vehicle in which the LMU is installed that originated the LM Direct™ message.
+
+            _This field represents [optionsHeader.vin] property from kaitai struct_
+          type: string
+          example: BS4B12237
+        serviceType:
+          title: Service type
+          description: |
+            Service type
+            
+            _This field represents [messageHeader.serviceType] property from kaitai struct_
+          type: string
+          enum:
+            - UNACKNOWLEDGED_REQUEST
+            - ACKNOWLEDGED_REQUEST
+            - RESPONSE_ACKNOWLEDGED_REQUEST
+          example: ACKNOWLEDGED_REQUEST
+        messageType:
+          title: Message type
+          description: |
+            Message type
+            
+            _This field represents [messageHeader.messageType] property from kaitai struct_
+          type: string
+          enum:
+            - NULL_MESSAGE
+            - ACK_NAK_MESSAGE
+            - EVENT_REPORT_MESSAGE
+            - ID_REPORT_MESSAGE
+            - USER_DATA_MESSAGE
+            - APPLICATION_DATA_MESSAGE
+            - CONFIGURATION_PARAMETER_MESSAGE
+            - UNIT_REQUEST_MESSAGE
+            - LOCATE_REPORT_MESSAGE
+            - USER_DATA_WITH_ACCUMULATORS_MESSAGE
+            - MINI_EVENT_REPORT_MESSAGE
+            - MINI_USER_DATA_MESSAGE
+            - MINI_APPLICATION_MESSAGE
+            - DEVICE_VERSION_MESSAGE
+            - APPLICATION_MESSAGE_WITH_ACCUMULATORS
+          example: EVENT_REPORT_MESSAGE
+        sequenceNumber:
+          title: Sequence type
+          description: |
+            A  number is used to uniquely identify a message.
+            
+            _This field represents [messageHeader.sequenceNumber] property from kaitai struct_
           type: number
-          format: float
-    Point:
+          format: int64
+          example: 68
+        deviceGeneration:
+          title: Device generation
+          description: |
+            Bobcat Device Generation
+
+            _This field represents [messageBody.deviceGeneration] property from kaitai struct_
+          type: number
+          format: int64
+          example: 2
+        status:
+          - $ref: "#/components/schemas/EventStatus"
+        message:
+          - $ref: "#/components/schemas/BobcatInstantMessage"
+
+    EventStatus:
       type: object
-      title: Point
-      description: Point
+      description: CalAmp LM Direct Status
       properties:
-        x:
-          title: x
-          description: x coordinate
+        altitude:
+          title: Machine altitude
+          description: |
+            The altitude reading of the GPS receiver measured in meters
+            
+            _This field represents [messageBody.status.altitude] property from kaitai struct_
           type: number
           format: float
-        y:
-          title: y
-          description: y x coordinate
+          example: 238.09
+        rssi:
+          title: Machine rssi
+          description: |
+            The received signal strength of the wireless modem in dBm
+            
+            _This field represents [messageBody.status.altitude] property from kaitai struct_
+          type: number
+          format: int64
+          example: -66
+        hdop:
+          title: Machine hdop
+          description: |
+            The GPS Horizontal Dilution of Precision
+            
+            _This field represents [messageBody.status.altitude] property from kaitai struct_
           type: number
           format: float
-    Point2:
+          example: 1.2
+        latitude:
+          title: Machine latitude
+          description: |
+            The latitude reading of the GPS receiver, measured in degrees
+            
+            _This field represents [messageBody.status.altitude] property from kaitai struct_
+          type: number
+          format: float
+          example: 44.9848555
+        longitude:
+          title: Machine longitude
+          description: |
+            The longitude reading of the GPS receiver, measured in degrees
+            
+            _This field represents [messageBody.status.altitude] property from kaitai struct_
+          type: number
+          format: float
+          example: -93.2199235
+        speed:
+          title: Machine speed
+          description: |
+            The speed as reported by the GPS receiver, measured in meters per second
+            
+            _This field represents [messageBody.status.altitude] property from kaitai struct_
+          type: number
+          format: float
+          example: 0.0
+        updateTime:
+          title: Machine update time
+          description: |
+            The time tag of the message in seconds.
+            
+            _This field represents [messageBody.status.updateTime] property from kaitai struct_
+          type: integer
+          format: epoch
+          example: 1616167366
+        timeOfFix:
+          title: Machine time of fix
+          description: |
+            The last known time of fix from the GPS satellites.
+            
+            _This field represents [messageBody.status.timeOfFix] property from kaitai struct_
+          type: integer
+          format: epoch
+          example: 1616167366
+        heading:
+          title: Machine heading
+          description: |
+            The heading value reported in degrees from true North
+            
+            _This field represents [messageBody.status.heading] property from kaitai struct_
+          type: number
+          format: int64
+          example: 181
+        satellites:
+          title: Machine connected satellites
+          description: |
+            The number of satellites used in the GPS solution
+            
+             _This field represents [messageBody.status.satellites] property from kaitai struct_
+          type: number
+          format: int64
+          example: 10
+        carrier:
+          title: Machine carrier
+          description: |
+            The identifier of the Carrier/Operator the wireless modem is currently using. 
+            For GSM, HSPA, and LTE networks, this is the MNC (mobile network code). 
+            For CDMA networks this is the SID (system identification number).
+            
+            _This field represents [messageBody.status.carrier] property from kaitai struct_
+          type: number
+          format: int64
+          example: 410
+        networkTechnology:
+          title: Network Technology
+          description: |
+            Network Technology
+            
+            _This field represents [messageBody.status.commState.networkTechnology] property from kaitai struct_
+          type: string
+          enum:
+            - CDMA_GSM_2G
+            - UMTS_3G
+            - LTE_4G
+            - RESERVED
+          example: LTE_4G
+
+    MachineStatus:
       type: object
-      title: Point
-      description: Point
+      description:
       properties:
-        x:
-          title: x
-          description: x coordinate
+        engineHours:
+          title: Engine Hours (h)
+          description: |
+            Engine Hours (h)
+            
+            _This field represents [messageBody.accumulatorMap.engineHours] property from kaitai struct_
           type: number
           format: float
-        y:
-          title: y
-          description: y x coordinate
+          example: 18.85
+        internalBatteryVoltage:
+          title: Internal Battery Level (V)
+          description: |
+            Internal Battery Level (V)
+            
+            _This field represents [messageBody.accumulatorMap.internalBatteryVoltage] property from kaitai struct_
           type: number
           format: float
+          example: 0.926
+        deviceBatteryVoltage:
+          title: IoT Battery Level (V)
+          description: |
+            IoT Battery Level (V)
+            
+            _This field represents [messageBody.accumulatorMap.deviceBatteryVoltage] property from kaitai struct_
+          type: number
+          format: float
+          example: 11.886
+        fuelLevel:
+          title: Fuel Level (%)
+          description: |
+            Fuel Level (%)
+            
+            _This field represents [messageBody.accumulatorMap.fuelLevel] property from kaitai struct_
+          type: number
+          format: float
+          example: 87.6
+        serviceClockHours:
+          title: Service Clock Hours - Engine hours until next service (h)
+          description: |
+            Service Clock Hours - Engine hours until next service (h)
+            
+            _This field represents [messageBody.accumulatorMap.serviceClockHours] property from kaitai struct_
+          type: number
+          format: int64
+          example: -18
+        engineSpeed:
+          title: Engine Speed (RPM)
+          description: |
+            Engine Speed (RPM)
+            
+            _This field represents [messageBody.accumulatorMap.engineSpeed] property from kaitai struct_
+          type: number
+          format: float
+          example: 0.0
+        defLevel:
+          title: DEF Level (%)
+          description: |
+            DEF Level (%) 
+            
+            _This field represents [messageBody.accumulatorMap.defLevel] property from kaitai struct_
+          type: number
+          format: float
+          example: 93.2
+        cumulativeFuelUsage:
+          title: Cumulative Fuel Usage (l)
+          description: |
+            Cumulative Fuel Usage (l)
+            
+            _This field represents [messageBody.accumulatorMap.cumulativeFuelUsage] property from kaitai struct_
+          type: number
+          format: float
+          example: 94.5
+        geozoneStateBefore:
+          title: Machine geozone state before
+          description: |
+            Machine geozone state before reported
+            
+            _This field represents [messageBody.accumulatorMap.geozoneStateBefore] property from kaitai struct_
+          type: string
+          example: AAAAAA==
+        geozoneStateAfter:
+          title: Machine geozone state after
+          description: |
+            Machine geozone state after reported
+            
+            _This field represents [messageBody.accumulatorMap.geozoneStateAfter] property from kaitai struct_
+          type: string
+          example: AAAAAA==
+        attachmentId:
+          title: Attachment Id
+          description: |
+            Attachment id
+            
+            _This field represents [messageBody.accumulatorMap.attachmentId] property from kaitai struct_
+          type: number
+          format: int64
+          example: 255
+        userId:
+          title: User Id
+          description: |
+            User Id
+            
+            _This field represents [messageBody.accumulatorMap.userId] property from kaitai struct_
+          type: number
+          format: int64
+          example: 255
+        dm1ActiveFaultCount:
+          title: DM1 Active Fault Count
+          description: |
+            DM1 Active Fault Count
+            
+            _This field represents [messageBody.accumulatorMap.dm1ActiveFaultCount] property from kaitai struct_
+          type: number
+          format: int64
+          example: 0
+        bobcatActiveFaultCount:
+          title: Active Bobcat Fault Count
+          description: |
+            Active Bobcat Fault Count
+            
+            _This field represents [messageBody.accumulatorMap.bobcatActiveFaultCount] property from kaitai struct_
+          type: number
+          format: int64
+          example: 0
+
+    BobcatInstantMessage:
+      type: object
+      description: Bobcat Instant Message
+      properties:
+        defTemperature:
+          title: DEF Temperature (°C)
+          description: |
+            DEF Temperature (°C)
+            
+            _This field represents [messageBody.applicationMessage.applicationMessage.payload.defTemperature] property from kaitai struct_
+          type: number
+          format: int64
+          example: 15
+        engineCoolantTemperature:
+          title: Engine Coolant Temperature (°C)
+          description: |
+            Engine Coolant Temperature (°C)
+            
+            _This field represents [messageBody.applicationMessage.applicationMessage.payload.engineCoolantTemperature] property from kaitai struct_
+          type: number
+          format: int64
+          example: 49
+        hydraulicOilTemperature:
+          title: Hydraulic Oil Temperature (°C)
+          description: |
+            Hydraulic Oil Temperature (°C)
+            
+            _This field represents [messageBody.applicationMessage.applicationMessage.payload.hydraulicOilTemperature] property from kaitai struct_
+          type: number
+          format: int64
+          example: 23
+        engineOilPressure:
+          title: Engine Oil Pressure (kPa)
+          description: |
+            Engine Oil Pressure (kPa)
+            
+            _This field represents [messageBody.applicationMessage.applicationMessage.payload.engineOilPressure] property from kaitai struct_
+          type: number
+          format: int64
+          example: 500
+        load:
+          title: Load (Actual Engine - Percent Torque) (%)
+          description: |
+            Load (Actual Engine - Percent Torque) (%)
+            
+            _This field represents [messageBody.applicationMessage.applicationMessage.payload.load] property from kaitai struct_
+          type: number
+          format: int64
+          example: 130
+        fuelRailPressure:
+          title: Fuel Rail Pressure (MPa)
+          description: |
+            Fuel Rail Pressure (MPa)
+            
+            _This field represents [messageBody.applicationMessage.applicationMessage.payload.fuelRailPressure] property from kaitai struct_
+          type: number
+          format: float
+          example: 0.3984375
+        hydraulicChargePressure:
+          title: Hydraulic Charge Pressure
+          description: |
+            Hydraulic Charge Pressure
+            
+            _This field represents [messageBody.applicationMessage.applicationMessage.payload.hydraulicChargePressure] property from kaitai struct_
+          type: number
+          format: float
+          example: 2874.0
+        throttlePosition:
+          title: Throttle Position (%)
+          description: |
+            Throttle Position (%)
+            
+            _This field represents [messageBody.applicationMessage.applicationMessage.payload.throttlePosition] property from kaitai struct_
+          type: number
+          format: float
+          example: 16.0
+        engineOilTemperature:
+          title: Engine Oil Temperature (°C)
+          description: |
+            Engine Oil Temperature (°C)
+            
+            _This field represents [messageBody.applicationMessage.applicationMessage.payload.engineOilTemperature] property from kaitai struct_
+          type: number
+          format: float
+          example: 92.75
+        defConcentration:
+          title: DEF Concentration (%)
+          description: |
+            DEF Concentration (%)
+            
+            _This field represents [messageBody.applicationMessage.applicationMessage.payload.defConcentration] property from kaitai struct_
+          type: number
+          format: float
+          example: 32.75
+        engineFuelTemperature:
+          title: Engine Fuel Temperature (°C)
+          description: |
+            Engine Fuel Temperature (°C)
+            
+            _This field represents [messageBody.applicationMessage.applicationMessage.payload.engineFuelTemperature] property from kaitai struct_
+          type: number
+          format: int64
+          example: 18
+        fuelConsumption:
+          title: Fuel Consumption (l/h)
+          description: |
+            Fuel Consumption (l/h)
+            
+            _This field represents [messageBody.applicationMessage.applicationMessage.payload.fuelConsumption] property from kaitai struct_
+          type: number
+          format: float
+          example: 2.05
+        brakeSwitch:
+          title: Brake switch
+          description: |
+            Brake switch
+
+            _This field represents [messageBody.applicationMessage.applicationMessage.payload.brakeSwitch] property from kaitai struct_
+          type: number
+          format: int64
+          example: 0
+        seatbarPosition:
+          title: Seatbar Position
+          description: |
+            Seatbar Position
+            
+            _This field represents [messageBody.applicationMessage.applicationMessage.payload.seatbarPosition] property from kaitai struct_
+          type: number
+          format: int64
+          example: 1
+        doorPosition:
+          title: Door Position
+          description: |
+            Door Position
+            
+            _This field represents [messageBody.applicationMessage.applicationMessage.payload.doorPosition] property from kaitai struct_
+          type: number
+          format: int64
+          example: 1
+        workgroupState:
+          title: Workgroup State
+          description: |
+            Workgroup State
+
+              _This field represents [messageBody.applicationMessage.applicationMessage.payload.workgroupState] property from kaitai struct_
+          type: number
+          format: int64
+          example: 0
+        driveState:
+          title: Drive State
+          description: |
+            Drive State
+            
+            _This field represents [messageBody.applicationMessage.applicationMessage.payload.driveState] property from kaitai struct_
+          type: number
+          format: int64
+          example: 0
+        driveResponse:
+          title: Drive Response
+          description: |
+            Drive Response
+            
+            _This field represents [messageBody.applicationMessage.applicationMessage.payload.driveResponse] property from kaitai struct_
+          type: number
+          format: int64
+          example: 1
+        steeringDriftForward:
+          title: Steering Drift Forward
+          description: |
+            Steering Drift Forward
+            
+            _This field represents [messageBody.applicationMessage.applicationMessage.payload.steeringDriftForward] property from kaitai struct_
+          type: number
+          format: int64
+          example: 92
+        steeringDriftReverse:
+          title: Steering Drift Reverse
+          description: |
+            Steering Drift Reverse
+            
+            _This field represents [messageBody.applicationMessage.applicationMessage.payload.steeringDriftReverse] property from kaitai struct_
+          type: number
+          format: int64
+          example: 100
+        frontBaseSolenoid:
+          title: Front Base Solenoid
+          description: |
+            Front Base Solenoid
+            
+            _This field represents [messageBody.applicationMessage.applicationMessage.payload.frontBaseSolenoid] property from kaitai struct_
+          type: number
+          format: int64
+          example: 0
+        frontRodSolenoid:
+          title: Front Rod Solenoid
+          description: |
+            Front Rod Solenoid
+            
+            _This field represents [messageBody.applicationMessage.applicationMessage.payload.frontRodSolenoid] property from kaitai struct_
+          type: number
+          format: int64
+          example: 0
+        rearBaseSolenoid:
+          title: Rear Base Solenoid
+          description: |
+            Rear Base Solenoid
+            
+            _This field represents [messageBody.applicationMessage.applicationMessage.payload.rearBaseSolenoid] property from kaitai struct_
+          type: number
+          format: int64
+          example: 0
+        rearRodSolenoid:
+          title: Rear Rod Solenoid
+          description: |
+            Rear Rod Solenoid
+            
+            _This field represents [messageBody.applicationMessage.applicationMessage.payload.rearRodSolenoid] property from kaitai struct_
+          type: number
+          format: int64
+          example: 0
+        highFlowSolenoid:
+          title: High Flow Solenoid
+          description: |
+            High Flow Solenoid
+            
+            _This field represents [messageBody.applicationMessage.applicationMessage.payload.highFlowSolenoid] property from kaitai struct_
+          type: number
+          format: int64
+          example: 0
+        engineStateCrankingState:
+          title: Engine Cranking State
+          description: |
+            Engine Cranking State
+            
+            _This field represents [messageBody.applicationMessage.applicationMessage.payload.engineStateCrankingState] property from kaitai struct_
+          type: number
+          format: int64
+          example: 3
+        auxiliary:
+          title: Auxiliary
+          description: |
+            Auxiliary
+            
+            _This field represents [messageBody.applicationMessage.applicationMessage.payload.auxiliary] property from kaitai struct_
+          type: number
+          format: int64
+          example: 0
+        highFlow:
+          title: High Flow
+          description: |
+            High Flow
+            
+            _This field represents [messageBody.applicationMessage.applicationMessage.payload.highFlow] property from kaitai struct_
+          type: number
+          format: int64
+          example: 0
