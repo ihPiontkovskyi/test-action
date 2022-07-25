@@ -114,7 +114,7 @@ components:
           format: int64
           example: 2
         status:
-          - $ref: "#/components/schemas/EventStatus"
+          $ref: "#/components/schemas/EventStatus"
         eventIndex:
           title: Event index
           description: |
@@ -165,7 +165,7 @@ components:
             - ALTERNATIVE256
           example: STANDARD
         machineStatus:
-          - $ref: "#/components/schemas/MachineStatus"
+          $ref: "#/components/schemas/MachineStatus"
 
     CalampType5InstantEvent:
       type: object
@@ -267,9 +267,9 @@ components:
           format: int64
           example: 2
         status:
-          - $ref: "#/components/schemas/EventStatus"
+          $ref: "#/components/schemas/EventStatus"
         message:
-          - $ref: "#/components/schemas/BobcatInstantMessage"
+          $ref: "#/components/schemas/BobcatInstantMessage"
 
     EventStatus:
       type: object
@@ -392,7 +392,7 @@ components:
 
     MachineStatus:
       type: object
-      description:
+      description: Calamp machine status
       properties:
         engineHours:
           title: Engine Hours (h)
